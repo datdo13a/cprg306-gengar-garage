@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "daisyui": "^5.5.5",
+    "firebase": "^12.6.0",
     "next": "16.0.4",
     "pokemontcgsdk": "^2.0.0",
     "react": "19.2.0",
