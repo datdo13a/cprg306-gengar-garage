@@ -13,7 +13,9 @@ export default function NavBar() {
         ></Image>
       </div>
       <div className="flex-1">
-        <a className="btn btn-ghost text-3xl">Gengar Garage</a>
+        <a className="btn btn-ghost text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          Gengar Garage
+        </a>
       </div>
 
       <div className="flex gap-10">
