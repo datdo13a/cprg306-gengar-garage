@@ -1,12 +1,12 @@
-export default function SideBar() {
+export default function SideBar({ children }) {
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open pt-1">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col items-center justify-center">
-        {/* Page content here */}
+      <div className="drawer-content flex flex-col">
         <label htmlFor="my-drawer-3" className="btn drawer-button lg:hidden">
           Open drawer
         </label>
+        {children}
       </div>
       <div className="drawer-side">
         <label
@@ -14,13 +14,22 @@ export default function SideBar() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-200 min-h-full w-80 p-4">
+        <ul className="menu bg-base-100 min-h-full w-80 pt-8 p-4 gap-4 text-xl font-light text-gray-500">
           {/* Sidebar content here */}
           <li>
-            <a>Sidebar Item 1</a>
+            <a>Collection</a>
           </li>
           <li>
-            <a>Sidebar Item 2</a>
+            <a>Profile</a>
+          </li>
+          <li>
+            <a>Search</a>
+          </li>
+          <li>
+            <a>Settings</a>
+          </li>
+          <li>
+            <a>Log Out</a>
           </li>
         </ul>
       </div>
