@@ -6,5 +6,5 @@ import function searchPage() {
 
   return (
     <main></main>
-  )
+  );
 }
