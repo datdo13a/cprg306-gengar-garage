@@ -4,16 +4,16 @@ import { getPokemonCards } from "@/lib/api";
 import Image from "next/image";
 
 export default function SearchPage() {
-  const [searchWord, setSearchWord] = useState("");
-  const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null); // For modal
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchWord.trim()) return;
+    const [searchWord, setSearchWord] = useState("");
+    const [cards, setCards] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error , setError] = useState(null);
+    const [hasSearched, setHasSearched] = useState(false);
+    
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if(!searchWord.trim()) return;
 
     setLoading(true);
     setError(null);
@@ -32,7 +32,8 @@ export default function SearchPage() {
 
   return (
     <main style={{ padding: "20px" }}>
-      {/* Search Bar */}
+
+      {/***Search Bar***/}
       <form onSubmit={handleSearch} className="mb-8">
         <div className="flex gap-2">
           <input
@@ -52,30 +53,29 @@ export default function SearchPage() {
         </div>
       </form>
 
-      {/* Loading state */}
-      {loading && (
-        <div>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p>Loading ... this may take a while!</p>
-        </div>
-      )}
+      {/*--- Loading state (make it look fancy) --- */}
+        {loading && (
+            <div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        )}
 
-      {/* Error handling */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-          {error}
-        </div>
-      )}
+      {/*--- Error handling ---*/}
+        {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+                {error}
+            </div>
+        )}
 
-      {/* No results */}
-      {!loading && cards.length === 0 && hasSearched && (
+       {/*--- If no results show up --- */}
+       {!loading && cards.length && hasSearched === 0 &&(
         <div className="text-center py-12">
           <p className="text-gray-600 text-lg">No cards found :|</p>
         </div>
       )}
 
-      {/* Show cards */}
-      {!loading && cards.length > 0 && (
+        {/*---Show cards from search results--- */}
+        {!loading && cards.length > 0 && (
         <>
           <div className="mb-4">
             <p className="text-gray-600">
@@ -89,55 +89,33 @@ export default function SearchPage() {
               <div
                 key={card.id}
                 className="bg-white shadow-lg border border-gray-200 p-4 rounded-xl hover:shadow-xl transition-shadow cursor-pointer"
-                onClick={() => setSelectedCard(card)} // Open modal
-              >
-                <Image
-                  src={card.images.small}
-                  alt={card.name}
-                  width={245}
-                  height={342}
-                  className="w-full h-auto"
-                />
-                <h3 className="pt-4 text-xl font-bold">{card.name}</h3>
-                <p>Set: {card.set.name}</p>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* Default state */}
-      {!hasSearched && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">
-            Enter Pokemon name to get started
-          </p>
-        </div>
-      )}
-
-      {/* Modal */}
-      {selectedCard && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-xl max-w-lg w-full relative">
-            <button
-              onClick={() => setSelectedCard(null)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
             >
-              &times;
-            </button>
-            <h2 className="text-2xl font-bold mb-4">{selectedCard.name}</h2>
-            <p className="mb-4">{selectedCard.text || "No description available."}</p>
             <Image
-              src={selectedCard.images.large || selectedCard.images.small}
-              alt={selectedCard.name}
-              width={200}
-              height={320}
+              src={card.images.small}
+              alt={card.name}
+              width={245}
+              height={342}
               className="w-full h-auto"
             />
-            <p className="mt-4 text-gray-600">Set: {selectedCard.set.name}</p>
+            
+            {/* --- CARD NAME --- */}
+            <h3 className="pt-4 text-xl font-bold">{card.name}</h3>
+            
+            {/* --- SET NAME --- */}
+            <p>Set: {card.set.name}</p>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+      </>
+        )}
+        {/*** Default State ***/}
+        {!hasSearched && !loading &&(
+            <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">
+                    Enter Pokemon name to get started
+                </p>
+            </div>
+        )}
     </main>
   );
 }
