@@ -32,6 +32,25 @@ export default function SearchPage() {
     }
   };
 
+  const handleSetFeatured = async (card) => {
+    if (!user) {
+      setError("You must be logged in to feature a card.");
+      return;
+    }
+
+    setfeaturedCardId(card.id);
+    try {
+      await setFeaturedCard(user.uid, card);
+      alert(
+        `${card.name} is now your featured card! Check your profile page to view your featured card.`
+      );
+    } catch (error) {
+      console.error("Failed to set featured card. Try again.");
+    } finally {
+      setfeaturedCardId(null);
+    }
+  };
+
   return (
     <main style={{ padding: "20px" }}>
 
