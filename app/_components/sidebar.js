@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function SideBar({ children }) {
   return (
     <div className="drawer lg:drawer-open pt-1">
@@ -23,7 +25,7 @@ export default function SideBar({ children }) {
             <a>Profile</a>
           </li>
           <li>
-            <a>Search</a>
+            <Link href="/search">Search</Link>
           </li>
           <li>
             <a>Settings</a>

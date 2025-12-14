@@ -19,11 +19,6 @@ export default function NavBar() {
       </div>
 
       <div className="flex gap-10">
-        <input
-          type="text"
-          placeholder="Search"
-          className="input input-bordered w-24 md:w-auto"
-        />
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
