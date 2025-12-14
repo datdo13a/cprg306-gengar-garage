@@ -65,14 +65,13 @@ export default function ProfilePage() {
               <div className="mt-4">
                 <h3 className="text-2xl font-bold">{featuredCard.name}</h3>
                 <p>{featuredCard.supertype}</p>
-                <p>HP: {featuredCard.hp}</p>
-                <p>{featuredCard.artist}</p>
                 <p className="text-gray-600">Set: {featuredCard.set.name}</p>
 
                 {featuredCard.rarity && (
                   <p className="text-gray-600">Rarity: {featuredCard.rarity}</p>
                 )}
-
+                <p>Flavor Text: {featuredCard.flavour}</p>
+                <p>Artist: {featuredCard.artist}</p>
                 <p></p>
               </div>
             </div>
