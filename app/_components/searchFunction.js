@@ -159,6 +159,7 @@ return (
                   <p className="pt-2 text-gray-600">
                     Set: {selectedCard.set.name}
                   </p>
+                  
                 </div>
 
                 {/* DESCRIPTION */}
@@ -179,6 +180,16 @@ return (
                       <strong>{attack.name}:</strong> {attack.text}
                     </p>
                   ))}
+                  <br></br>
+
+                  {/* ADD BUTTON */}
+                  <button
+                    onClick={() => addCardToSet(selectedCard)}
+                    className="mt-4 w-50 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg
+                              hover:bg-green-700 transition-colors"
+                  >
+                    Add to Set
+                  </button>
                 </div>
               </div>
             </div>
