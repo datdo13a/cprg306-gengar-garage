@@ -40,6 +40,8 @@ export default function ProfilePage() {
 
   return (
     <div className="p-8">
+      {/* Profile Info */}
+      <div>Profile Page</div>
       {/* Featured Card Section */}
       <div className="mb-8">
         {loading ? (
@@ -48,14 +50,14 @@ export default function ProfilePage() {
             <p>Loading featured card...</p>
           </div>
         ) : featuredCard ? (
-          <div className="card lg:card-side bg-base-100 shadow-lg border-1 border-base-300 p-10 mr-30 ml-30">
-            <figure>
+          <div className="card 2xl:card-side bg-base-100 shadow-lg border-1 border-base-300 p-10 mr-30 ml-30">
+            <figure className="shadow-2xl rounded-xl">
               <Image
                 src={featuredCard.images.large || featuredCard.images.small}
                 alt={featuredCard.name}
                 width={400}
                 height={560}
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto"
               />
             </figure>
             <div className="card-body ml-4">
@@ -63,15 +65,16 @@ export default function ProfilePage() {
                 {user.displayName}'s Featured Card
               </h2>
               <div className="mt-4">
-                <h3 className="text-2xl font-bold">{featuredCard.name}</h3>
-                <p>{featuredCard.supertype}</p>
-                <p className="text-gray-600">Set: {featuredCard.set.name}</p>
+                <h3 className="text-3xl font-bold">{featuredCard.name}</h3>
+                <p className="text-lg mt-5">Set: {featuredCard.set.name}</p>
 
                 {featuredCard.rarity && (
-                  <p className="text-gray-600">Rarity: {featuredCard.rarity}</p>
+                  <p className="text-lg mt-2">Rarity: {featuredCard.rarity}</p>
                 )}
-                <p>Flavor Text: {featuredCard.flavour}</p>
-                <p>Artist: {featuredCard.artist}</p>
+                <p className="text-lg mt-2">
+                  Flavor Text: {featuredCard.flavour}
+                </p>
+                <p className="text-lg mt-2">Artist: {featuredCard.artist}</p>
                 <p></p>
               </div>
             </div>
