@@ -1,7 +1,10 @@
 import Link from "daisyui/components/link";
 import Image from "next/image";
+import { useUserAuth } from "@/_utils/auth-context";
 
 export default function NavBar() {
+  // work on making the profile image on navbar persist throughout the website
+  const { user } = useUserAuth();
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="ml-2 mt-5 mb-5 mr-2">
@@ -28,7 +31,9 @@ export default function NavBar() {
             <div className="w-10 rounded-full">
               <img
                 alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                src={
+                  "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                }
               />
             </div>
           </div>
