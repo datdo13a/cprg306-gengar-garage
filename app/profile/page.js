@@ -8,7 +8,6 @@ export default function ProfilePage() {
   const { user } = useUserAuth();
   const [featuredCard, setFeaturedCard] = useState(null);
   const [loading, setLoading] = useState(true);
-  // Move join date calculation here, outside the if block
   let formattedJoinDate = "N/A";
   if (user) {
     const creationTime = user.metadata.creationTime;
