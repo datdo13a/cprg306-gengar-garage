@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useUserAuth } from "@/_utils/auth-context";
 
 export default function SignInPage() {
@@ -72,7 +73,7 @@ export default function SignInPage() {
             {/* Logo/Icon Section */}
             <div className="text-center mb-8">
               <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center shadow-lg">
-                <span className="text-5xl">👾</span>
+                <Image src="/gengar-garage-icon.png" alt="Gengar Garage" width={80} height={80} className="rounded-full" />
               </div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
                 GengarGarage
