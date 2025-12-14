@@ -9,7 +9,7 @@ export async function GET(request) {
   }
 
   const res = await fetch(
-    `https://api.pokemontcg.io/v2/cards?q=${query}&pageSize=20`,
+    `https://api.pokemontcg.io/v2/cards?q=${query}&pageSize=300`,
     {
       headers: {
         "X-Api-Key": process.env.POKEMON_TCG_API_KEY,
