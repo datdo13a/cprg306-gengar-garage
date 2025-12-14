@@ -1,10 +1,9 @@
-"use client";
-import { getPokemonCards } from "@/lib/api";
-import Image from "next/image";
+import SearchFunction from "../_components/searchFunction";
 
-import function searchPage() {
-
+export default function SearchPage() {
   return (
-    <main></main>
+    <main>
+      <SearchFunction />
+    </main>
   );
 }

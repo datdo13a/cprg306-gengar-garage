@@ -3,12 +3,13 @@ import { useState } from "react";
 import { getPokemonCards } from "@/lib/api";
 import Image from "next/image";
 
-export default function searchPage() {
+export default function SearchPage() {
 
     const [searchWord, setSearchWord] = useState("");
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error , setError] = useState(null);
+    const [hasSearched, setHasSearched] = useState(false);
     
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -16,9 +17,10 @@ export default function searchPage() {
 
         setLoading(true);
         setError(null);
+        setHasSearched(true);
         
         try{
-            const results = await getPokemonCards (`name: ${searchWord}`);
+            const results = await getPokemonCards (`name:${searchWord}`);
             setCards(results);
         } catch (err){
             setError("Please try again");
@@ -66,7 +68,7 @@ return (
         )}
 
        {/*--- If no results show up --- */}
-       {!loading && cards.length === 0 &&(
+       {!loading && cards.length && hasSearched === 0 &&(
         <div className="text-center py-12">
             <p className="text-gray-600 text-lg">
                 No cards found :|
@@ -90,21 +92,31 @@ return (
                 key={card.id}
                 className="bg-white shadow-lg border border-gray-200 p-4 rounded-xl hover:shadow-xl transition-shadow cursor-pointer"
             >
-            <img
+            <Image
               src={card.images.small}
               alt={card.name}
-              className="w-100 h-auto"
+              width={245}
+              height={342}
+              className="w-full h-auto"
             />
             
-            {/* CARD NAME */}
+            {/* --- CARD NAME --- */}
             <h3 className="pt-4 text-xl font-bold">{card.name}</h3>
             
-            {/* SET NAME */}
+            {/* --- SET NAME --- */}
             <p>Set: {card.set.name}</p>
           </div>
         ))}
       </div>
       </>
+        )}
+        {/*** Default State ***/}
+        {!hasSearched && !loading &&(
+            <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">
+                    Enter Pokemon name to get started
+                </p>
+            </div>
         )}
     </main>
     );
