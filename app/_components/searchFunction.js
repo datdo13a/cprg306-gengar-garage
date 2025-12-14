@@ -4,6 +4,7 @@ import { getPokemonCards } from "@/lib/api";
 import Image from "next/image";
 
 export default function SearchPage() {
+<<<<<<< Updated upstream
   const [searchWord, setSearchWord] = useState("");
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,49 @@ export default function SearchPage() {
       <form onSubmit={handleSearch} className="mb-8">
         <div className="flex gap-2">
           <input
+=======
+    const [searchWord, setSearchWord] = useState("");
+    const [cards, setCards] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [hasSearched, setHasSearched] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!searchWord.trim()) return;
+
+        setLoading(true);
+        setError(null);
+        setHasSearched(true);
+
+        try {
+        const results = await getPokemonCards(`name:${searchWord}`);
+        setCards(results);
+        } catch (err) {
+        setError("Please try again");
+        console.error(err);
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    const closeModal = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+        setSelectedCard(null);
+        setIsClosing(false);
+        }, 300); // Duration matches the CSS animation
+    };
+
+    return (
+    <main style={{ padding: "20px" }}>
+        {/***Search Bar***/}
+        <form onSubmit={handleSearch} className="mb-8">
+        <div className="flex gap-2">
+            <input
+>>>>>>> Stashed changes
             type="text"
             value={searchWord}
             onChange={(e) => setSearchWord(e.target.value)}
@@ -45,12 +89,19 @@ export default function SearchPage() {
             type="submit"
             disabled={loading || !searchWord.trim()}
             className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+<<<<<<< Updated upstream
           >
             {loading ? "Searching..." : "Search"}
           </button>
+=======
+            >
+            {loading ? "Searching..." : "Search"}
+            </button>
+>>>>>>> Stashed changes
         </div>
-      </form>
+        </form>
 
+<<<<<<< Updated upstream
       {/*--- Loading state (make it look fancy) --- */}
       {loading && (
         <div>
@@ -72,10 +123,34 @@ export default function SearchPage() {
           <p className="text-gray-600 text-lg">No cards found :|</p>
         </div>
       )}
+=======
+        {/*--- Loading state (make it look fancy) --- */}
+            {loading && (
+            <div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                <p>Loading ... this may take a while!</p>
+            </div>
+            )}
+
+        {/*--- Error handling ---*/}
+            {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+                {error}
+            </div>
+            )}
+
+        {/*--- If no results show up --- */}
+            {!loading && cards.length && hasSearched === 0 &&(
+            <div className="text-center py-12">
+                <p className="text-gray-600 text-lg">No cards found :|</p>
+            </div>
+            )}
+>>>>>>> Stashed changes
 
       {/*---Show cards from search results--- */}
       {!loading && cards.length > 0 && (
         <>
+<<<<<<< Updated upstream
           <div className="mb-4">
             <p className="text-gray-600">
               Found <span className="font-semibold">{cards.length}</span> card
@@ -95,6 +170,28 @@ export default function SearchPage() {
                   width={245}
                   height={342}
                   className="w-full h-auto"
+=======
+            <div className="mb-4">
+            <p className="text-gray-600">
+                Found <span className="font-semibold">{cards.length}</span> card
+                {cards.length !== 1 ? "s" : ""}
+            </p>
+            </div>
+
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5">
+            {cards.map((card) => (
+                <div
+                key={card.id}
+                className="bg-white shadow-lg border border-gray-200 p-4 rounded-xl hover:shadow-xl transition-shadow cursor-pointer"
+                onClick={() => setSelectedCard(card)}
+                >
+                <Image
+                    src={card.images.small}
+                    alt={card.name}
+                    width={245}
+                    height={342}
+                    className="w-full h-auto"
+>>>>>>> Stashed changes
                 />
 
                 {/* --- CARD NAME --- */}
@@ -102,6 +199,7 @@ export default function SearchPage() {
 
                 {/* --- SET NAME --- */}
                 <p>Set: {card.set.name}</p>
+<<<<<<< Updated upstream
               </div>
             ))}
           </div>
@@ -113,6 +211,79 @@ export default function SearchPage() {
           <p className="text-gray-500 text-lg">
             Enter Pokemon name to get started
           </p>
+=======
+                </div>
+            ))}
+            </div>
+        </>
+        )}
+        {/*** Default State ***/}
+        {!hasSearched && !loading && (
+        <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">
+            Enter Pokemon name to get started
+            </p>
+        </div>
+        )}
+
+
+        {/* Pop-up window for card description using modal */}
+        {selectedCard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className={`bg-white p-6 rounded-xl max-w-lg w-full relative modal-pop ${isClosing ? "modal-close" : ""}`}>
+            <button
+            onClick={closeModal}
+            className="absolute top-3 right-3 z-50 text-gray-700 hover:text-black text-2xl font-bold"
+            >
+            &times;
+            </button>
+            <h2 className="text-2xl font-bold mb-4">{selectedCard.name}</h2>
+            <p className="mb-4">{selectedCard.text || "No description available."}</p>
+            <Image
+              src={selectedCard.images.large || selectedCard.images.small}
+              alt={selectedCard.name}
+              width={100}
+              height={240}
+              className="w-full h-auto"
+            />
+            <p className="mt-4 text-gray-600">Set: {selectedCard.set.name}</p>
+          </div>
+
+          {/* Scoped CSS */}
+          <style jsx>{`
+            .modal-pop {
+              transform: scale(0.9);
+              opacity: 0;
+              animation: pop 0.3s ease-out forwards;
+            }
+
+            .modal-close {
+              animation: pop-close 0.3s ease-in forwards;
+            }
+
+            @keyframes pop {
+              0% {
+                opacity: 0;
+                transform: scale(0.9);
+              }
+              100% {
+                opacity: 1;
+                transform: scale(1);
+              }
+            }
+
+            @keyframes pop-close {
+              0% {
+                opacity: 1;
+                transform: scale(1);
+              }
+              100% {
+                opacity: 0;
+                transform: scale(0.9);
+              }
+            }
+          `}</style>
+>>>>>>> Stashed changes
         </div>
       )}
     </main>
