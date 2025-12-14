@@ -1,5 +1,5 @@
 "use client";
-import Link from "daisyui/components/link";
+import Link from "next/link";
 import Image from "next/image";
 import { useUserAuth } from "@/_utils/auth-context";
 import { useRouter } from "next/navigation";
@@ -21,15 +21,23 @@ export default function NavBar() {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="ml-2 mt-5 mb-5 mr-2">
-        <Image
-          src="/gengar-garage-icon.png"
-          alt="gengarGarage"
-          width={50}
-          height={50}
-        ></Image>
+        <div
+          onClick={() => router.push("/profile")}
+          className="hover: cursor-pointer"
+        >
+          <Image
+            src="/gengar-garage-icon.png"
+            alt="gengarGarage"
+            width={50}
+            height={50}
+          />
+        </div>
       </div>
       <div className="flex-1">
-        <a className="btn btn-ghost text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+        <a
+          className="btn btn-ghost text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+          onClick={() => router.push("/profile")}
+        >
           Gengar Garage
         </a>
       </div>
