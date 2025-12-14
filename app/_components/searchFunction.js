@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { getPokemonCards } from "@/lib/api";
 import Image from "next/image";
+import getCardDescription from "./getCardDescription";
 
 export default function SearchPage() {
 
@@ -10,6 +11,7 @@ export default function SearchPage() {
     const [loading, setLoading] = useState(false);
     const [error , setError] = useState(null);
     const [hasSearched, setHasSearched] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null)
     
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -55,8 +57,9 @@ export default function SearchPage() {
 
       {/*--- Loading state (make it look fancy) --- */}
         {loading && (
-            <div>
+            <div className="flex flex-col items-center justify-center gap-4">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                <p>Loading... This may take awhile!</p>
             </div>
         )}
 
@@ -89,6 +92,7 @@ export default function SearchPage() {
               <div
                 key={card.id}
                 className="bg-white shadow-lg border border-gray-200 p-4 rounded-xl hover:shadow-xl transition-shadow cursor-pointer"
+                onClick={() => setSelectedCard(card)}
             >
             <Image
               src={card.images.small}
@@ -115,6 +119,79 @@ export default function SearchPage() {
                     Enter Pokemon name to get started
                 </p>
             </div>
+        )}
+
+        {/* Modal */}
+        {selectedCard && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div
+              className="bg-white rounded-xl max-w-4xl w-full mx-4 relative
+                        max-h-[90vh] overflow-y-auto"
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedCard(null)}
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                aria-label="Close modal"
+              >
+                &times;
+              </button>
+
+              {/* Header */}
+              <h2 className="text-2xl font-bold p-6 pb-2">
+                {selectedCard.name}
+              </h2>
+
+              {/* CONTENT */}
+              <div className="flex flex-col md:flex-row gap-6 p-6">
+
+                {/* IMAGE */}
+                <div className="shrink-0 md:w-1/3">
+                  <Image
+                    src={selectedCard.images.large || selectedCard.images.small}
+                    alt={selectedCard.name}
+                    width={200}
+                    height={320}
+                    className="w-full h-auto rounded-lg"
+                  />
+                  <p className="pt-2 text-gray-600">
+                    Set: {selectedCard.set.name}
+                  </p>
+                  
+                </div>
+
+                {/* DESCRIPTION */}
+                <div className="md:w-2/3 space-y-3 text-sm overflow-y-auto">
+                <p className="text-2xl font-bold">Description: </p>
+                  {selectedCard.rules?.map((rule, i) => (
+                    <p key={i}>{rule}</p>
+                  ))}
+
+                  {selectedCard.abilities?.map((ability, i) => (
+                    <p key={i}>
+                      <strong>{ability.name}:</strong> {ability.text}
+                    </p>
+                  ))}
+
+                  {selectedCard.attacks?.map((attack, i) => (
+                    <p key={i}>
+                      <strong>{attack.name}:</strong> {attack.text}
+                    </p>
+                  ))}
+                  <br></br>
+
+                  {/* ADD BUTTON */}
+                  <button
+                    onClick={() => addCardToSet(selectedCard)}
+                    className="mt-4 w-50 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg
+                              hover:bg-green-700 transition-colors"
+                  >
+                    Add to Set
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
     </main>
   );
