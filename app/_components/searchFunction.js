@@ -3,19 +3,22 @@ import { useState } from "react";
 import { getPokemonCards } from "@/lib/api";
 import Image from "next/image";
 import getCardDescription from "./getCardDescription";
+import { useUserAuth } from "@/_utils/auth-context";
+import { setFeaturedCard } from "./featured-card";
 
 export default function SearchPage() {
+  const [searchWord, setSearchWord] = useState("");
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [featuredCardId, setfeaturedCardId] = useState(null);
+  const { user } = useUserAuth();
 
-    const [searchWord, setSearchWord] = useState("");
-    const [cards, setCards] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error , setError] = useState(null);
-    const [hasSearched, setHasSearched] = useState(false);
-    const [selectedCard, setSelectedCard] = useState(null)
-    
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        if(!searchWord.trim()) return;
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchWord.trim()) return;
 
     setLoading(true);
     setError(null);
@@ -32,17 +35,17 @@ export default function SearchPage() {
     }
   };
 
-  const handleSetFeatured = async (card) => {
+  const handleSetFeatured = async (selectedCard) => {
     if (!user) {
       setError("You must be logged in to feature a card.");
       return;
     }
 
-    setfeaturedCardId(card.id);
+    setfeaturedCardId(selectedCard.id);
     try {
-      await setFeaturedCard(user.uid, card);
+      await setFeaturedCard(user.uid, selectedCard);
       alert(
-        `${card.name} is now your featured card! Check your profile page to view your featured card.`
+        `${selectedCard.name} is now your featured card! Check your profile page to view your featured card.`
       );
     } catch (error) {
       console.error("Failed to set featured card. Try again.");
@@ -53,7 +56,6 @@ export default function SearchPage() {
 
   return (
     <main style={{ padding: "20px" }}>
-
       {/***Search Bar***/}
       <form onSubmit={handleSearch} className="mb-8">
         <div className="flex gap-2">
@@ -75,29 +77,29 @@ export default function SearchPage() {
       </form>
 
       {/*--- Loading state (make it look fancy) --- */}
-        {loading && (
-            <div className="flex flex-col items-center justify-center gap-4">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                <p>Loading... This may take awhile!</p>
-            </div>
-        )}
+      {loading && (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p>Loading... This may take awhile!</p>
+        </div>
+      )}
 
       {/*--- Error handling ---*/}
-        {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-                {error}
-            </div>
-        )}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+          {error}
+        </div>
+      )}
 
-       {/*--- If no results show up --- */}
-        {!loading && cards.length === 0 && hasSearched && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No cards found :|</p>
-          </div>
-        )}
+      {/*--- If no results show up --- */}
+      {!loading && cards.length === 0 && hasSearched && (
+        <div className="text-center py-12">
+          <p className="text-gray-600 text-lg">No cards found :|</p>
+        </div>
+      )}
 
-        {/*---Show cards from search results--- */}
-        {!loading && cards.length > 0 && (
+      {/*---Show cards from search results--- */}
+      {!loading && cards.length > 0 && (
         <>
           <div className="mb-4">
             <p className="text-gray-600">
@@ -112,106 +114,112 @@ export default function SearchPage() {
                 key={card.id}
                 className="bg-white shadow-lg border border-gray-200 p-4 rounded-xl hover:shadow-xl transition-shadow cursor-pointer"
                 onClick={() => setSelectedCard(card)}
-            >
-            <Image
-              src={card.images.small}
-              alt={card.name}
-              width={245}
-              height={342}
-              className="w-full h-auto"
-            />
-            
-            {/* --- CARD NAME --- */}
-            <h3 className="pt-4 text-xl font-bold">{card.name}</h3>
-            
-            {/* --- SET NAME --- */}
-            <p>Set: {card.set.name}</p>
-          </div>
-        ))}
-      </div>
-      </>
-        )}
-        {/*** Default State ***/}
-        {!hasSearched && !loading &&(
-            <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">
-                    Enter Pokemon name to get started
-                </p>
-            </div>
-        )}
-
-        {/* Modal */}
-        {selectedCard && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-            <div
-              className="bg-white rounded-xl max-w-4xl w-full mx-4 relative
-                        max-h-[90vh] overflow-y-auto"
-            >
-              {/* Close button */}
-              <button
-                onClick={() => setSelectedCard(null)}
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold"
-                aria-label="Close modal"
               >
-                &times;
-              </button>
+                <Image
+                  src={card.images.small}
+                  alt={card.name}
+                  width={245}
+                  height={342}
+                  className="w-full h-auto"
+                />
 
-              {/* Header */}
-              <h2 className="text-2xl font-bold p-6 pb-2">
-                {selectedCard.name}
-              </h2>
+                {/* --- CARD NAME --- */}
+                <h3 className="pt-4 text-xl font-bold">{card.name}</h3>
 
-              {/* CONTENT */}
-              <div className="flex flex-col md:flex-row gap-6 p-6">
+                {/* --- SET NAME --- */}
+                <p>Set: {card.set.name}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      {/*** Default State ***/}
+      {!hasSearched && !loading && (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">
+            Enter Pokemon name to get started
+          </p>
+        </div>
+      )}
 
-                {/* IMAGE */}
-                <div className="shrink-0 md:w-1/3">
-                  <Image
-                    src={selectedCard.images.large || selectedCard.images.small}
-                    alt={selectedCard.name}
-                    width={200}
-                    height={320}
-                    className="w-full h-auto rounded-lg"
-                  />
-                  <p className="pt-2 text-gray-600">
-                    Set: {selectedCard.set.name}
-                  </p>
-                  
-                </div>
+      {/* Modal */}
+      {selectedCard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div
+            className="bg-white rounded-xl max-w-4xl w-full mx-4 relative
+                        max-h-[90vh] overflow-y-auto"
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedCard(null)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
 
-                {/* DESCRIPTION */}
-                <div className="md:w-2/3 space-y-3 text-sm overflow-y-auto">
+            {/* Header */}
+            <h2 className="text-2xl font-bold p-6 pb-2">{selectedCard.name}</h2>
+
+            {/* CONTENT */}
+            <div className="flex flex-col md:flex-row gap-6 p-6">
+              {/* IMAGE */}
+              <div className="shrink-0 md:w-1/3">
+                <Image
+                  src={selectedCard.images.large || selectedCard.images.small}
+                  alt={selectedCard.name}
+                  width={200}
+                  height={320}
+                  className="w-full h-auto rounded-lg"
+                />
+                <p className="pt-2 text-gray-600">
+                  Set: {selectedCard.set.name}
+                </p>
+              </div>
+
+              {/* DESCRIPTION */}
+              <div className="md:w-2/3 space-y-3 text-sm overflow-y-auto">
                 <p className="text-2xl font-bold">Description: </p>
-                  {selectedCard.rules?.map((rule, i) => (
-                    <p key={i}>{rule}</p>
-                  ))}
+                {selectedCard.rules?.map((rule, i) => (
+                  <p key={i}>{rule}</p>
+                ))}
 
-                  {selectedCard.abilities?.map((ability, i) => (
-                    <p key={i}>
-                      <strong>{ability.name}:</strong> {ability.text}
-                    </p>
-                  ))}
+                {selectedCard.abilities?.map((ability, i) => (
+                  <p key={i}>
+                    <strong>{ability.name}:</strong> {ability.text}
+                  </p>
+                ))}
 
-                  {selectedCard.attacks?.map((attack, i) => (
-                    <p key={i}>
-                      <strong>{attack.name}:</strong> {attack.text}
-                    </p>
-                  ))}
-                  <br></br>
+                {selectedCard.attacks?.map((attack, i) => (
+                  <p key={i}>
+                    <strong>{attack.name}:</strong> {attack.text}
+                  </p>
+                ))}
+                <br></br>
 
-                  {/* ADD BUTTON */}
-                  <button
-                    onClick={() => addCardToSet(selectedCard)}
-                    className="mt-4 w-50 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg
+                {/* ADD BUTTON */}
+                <button
+                  onClick={() => addCardToSet(selectedCard)}
+                  className="mt-4 w-50 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg
                               hover:bg-green-700 transition-colors"
-                  >
-                    Add to Set
-                  </button>
-                </div>
+                >
+                  Add to Set
+                </button>
+                {/* --- SET FEATURED CARD BUTTON --- */}
+                <button
+                  className="btn btn-active btn-primary"
+                  onClick={() => handleSetFeatured(selectedCard)}
+                  disabled={featuredCardId === selectedCard.id}
+                >
+                  {featuredCardId === selectedCard.id
+                    ? "Setting..."
+                    : "Feature This Card"}
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </main>
   );
 }
