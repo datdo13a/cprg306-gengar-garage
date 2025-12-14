@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import { useUserAuth } from "@/_utils/auth-context";
 import { getFeaturedCard } from "../_components/featured-card";
 import Image from "next/image";
+import { getCardCollection } from "../_components/card-collection";
+import card from "daisyui/components/card";
 
 export default function ProfilePage() {
   const { user } = useUserAuth();
   const [featuredCard, setFeaturedCard] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cardCount, setCardCount] = useState(0);
+
   let formattedJoinDate = "N/A";
   if (user) {
     const creationTime = user.metadata.creationTime;
@@ -24,10 +28,11 @@ export default function ProfilePage() {
   useEffect(() => {
     async function loadFeaturedCard() {
       if (user) {
-        console.log("Loading featured card for user:", user.uid); // Debug log
+        console.log("Loading featured card for user:", user.uid);
         try {
           const card = await getFeaturedCard(user.uid);
-          console.log("Featured card loaded:", card); // Debug log
+          const collection = await getCardCollection(user.uid);
+          setCardCount(collection?.cards?.length || 0);
           setFeaturedCard(card);
         } catch (error) {
           console.error("Error loading featured card:", error);
@@ -67,8 +72,7 @@ export default function ProfilePage() {
 
               <div className="stat place-items-center">
                 <div className="stat-title">Cards in Collection</div>
-                <div className="stat-value text-secondary">4,200</div>
-                <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
+                <div className="stat-value text-secondary">{cardCount}</div>
               </div>
 
               <div className="stat place-items-center">
