@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function SideBar({ children }) {
   return (
-    <div className="drawer lg:drawer-open pt-1">
+    <div className="drawer lg:drawer-open pt-0.5">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <label htmlFor="my-drawer-3" className="btn drawer-button lg:hidden">
@@ -16,13 +16,13 @@ export default function SideBar({ children }) {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-100 min-h-full w-80 pt-8 p-4 gap-4 text-xl font-light text-gray-500">
+        <ul className="menu bg-base-100 border-r-1 border-base-300 min-h-full w-80 pt-8 p-4 gap-4 text-xl font-light text-gray-500">
           {/* Sidebar content here */}
           <li>
-            <a>Collection</a>
+            <Link href="/profile">Profile</Link>
           </li>
           <li>
-            <a>Profile</a>
+            <Link href="/collection">Collection</Link>
           </li>
           <li>
             <Link href="/search">Search</Link>
