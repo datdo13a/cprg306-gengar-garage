@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { getPokemonCards } from "@/lib/api";
 import Image from "next/image";
+import { useUserAuth } from "@/_utils/auth-context";
+import { setFeaturedCard } from "./featured-card";
 
 export default function SearchPage() {
   const [searchWord, setSearchWord] = useState("");
@@ -9,6 +11,8 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [featuredCardId, setfeaturedCardId] = useState(null);
+  const { user } = useUserAuth();
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -26,6 +30,25 @@ export default function SearchPage() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSetFeatured = async (card) => {
+    if (!user) {
+      setError("You must be logged in to feature a card.");
+      return;
+    }
+
+    setfeaturedCardId(card.id);
+    try {
+      await setFeaturedCard(user.uid, card);
+      alert(
+        `${card.name} is now your featured card! Check your profile page to view your featured card.`
+      );
+    } catch (error) {
+      console.error("Failed to set featured card. Try again.");
+    } finally {
+      setfeaturedCardId(null);
     }
   };
 
@@ -102,6 +125,16 @@ export default function SearchPage() {
 
                 {/* --- SET NAME --- */}
                 <p>Set: {card.set.name}</p>
+                {/* --- SET FEATURED CARD BUTTON --- */}
+                <button
+                  className="btn btn-active btn-primary"
+                  onClick={() => handleSetFeatured(card)}
+                  disabled={featuredCardId === card.id}
+                >
+                  {featuredCardId === card.id
+                    ? "Setting..."
+                    : "Feature This Card"}
+                </button>
               </div>
             ))}
           </div>

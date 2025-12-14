@@ -46,7 +46,7 @@ export default function SignInPage() {
 
             {/* Action Buttons */}
             <div className="space-y-4">
-              <Link href="/" className="block">
+              <Link href="/collection" className="block">
                 <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform cursor-pointer hover:scale-105">
                   Go to Collection
                 </button>
