@@ -1,7 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useUserAuth } from "@/_utils/auth-context";
-import { getCardCollection, removeCardFromCollection } from "../_components/card-collection";
+import {
+  getCardCollection,
+  removeCardFromCollection,
+} from "../_components/card-collection";
 import Image from "next/image";
 
 export default function Collection() {
@@ -66,7 +69,9 @@ export default function Collection() {
               >
                 <Image
                   src={
-                    card.images?.small || card.images?.large || "/placeholder.png"
+                    card.images?.small ||
+                    card.images?.large ||
+                    "/placeholder.png"
                   }
                   alt={card.name}
                   width={245}
@@ -82,9 +87,7 @@ export default function Collection() {
       )}
       {selectedCard && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div
-            className="bg-white rounded-xl max-w-4xl w-full mx-4 relative max-h-[90vh] overflow-y-auto"
-          >
+          <div className="bg-white rounded-xl max-w-4xl w-full mx-4 relative max-h-[90vh] overflow-y-auto">
             {/* Close button */}
             <button
               onClick={() => setSelectedCard(null)}
@@ -102,15 +105,15 @@ export default function Collection() {
               {/* IMAGE */}
               <div className="shrink-0 md:w-1/3">
                 <Image
-                  src={
-                    selectedCard.images.large || selectedCard.images.small
-                  }
+                  src={selectedCard.images.large || selectedCard.images.small}
                   alt={selectedCard.name}
                   width={200}
                   height={320}
                   className="w-full h-auto rounded-lg"
                 />
-                <p className="pt-2 text-gray-600">Set: {selectedCard.set.name}</p>
+                <p className="pt-2 text-gray-600">
+                  Set: {selectedCard.set.name}
+                </p>
               </div>
 
               {/* DESCRIPTION */}
