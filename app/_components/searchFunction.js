@@ -5,6 +5,7 @@ import Image from "next/image";
 import getCardDescription from "./getCardDescription";
 import { useUserAuth } from "@/_utils/auth-context";
 import { setFeaturedCard } from "./featured-card";
+import { addCardToCollection } from "./card-collection";
 
 export default function SearchPage() {
   const [searchWord, setSearchWord] = useState("");
@@ -51,6 +52,22 @@ export default function SearchPage() {
       console.error("Failed to set featured card. Try again.");
     } finally {
       setfeaturedCardId(null);
+    }
+  };
+
+  const handleAddToCollection = async (selectedCard) => {
+    if (!user) {
+      setError("You must be logged in to add a card to a collection.");
+      return;
+    }
+
+    try {
+      await addCardToCollection(user.uid, selectedCard);
+      alert(
+        `${selectedCard.name} is now added to your collection, check your collection page to see it in there.`
+      );
+    } catch (error) {
+      console.error("Failed to add card: " + error);
     }
   };
 
@@ -198,12 +215,20 @@ export default function SearchPage() {
                 <br></br>
 
                 {/* ADD BUTTON */}
-                <button
+                {/* <button
                   onClick={() => addCardToSet(selectedCard)}
                   className="mt-4 w-50 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg
                               hover:bg-green-700 transition-colors"
                 >
                   Add to Set
+                </button> */}
+                {/* ADD TO COLLECTION BUTTON */}
+                <button
+                  onClick={() => handleAddToCollection(selectedCard)}
+                  className="mt-4 w-50 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg
+                              hover:bg-green-700 transition-colors"
+                >
+                  Add to Collection
                 </button>
                 {/* --- SET FEATURED CARD BUTTON --- */}
                 <button
