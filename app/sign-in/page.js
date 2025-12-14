@@ -54,7 +54,7 @@ export default function SignInPage() {
               </Link>
 
               <Link href="/profile" className="block">
-                <button className="w-full bg-purple-100 text-purple-700 font-semibold py-4 px-6 rounded-xl hover:bg-purple-200 transition-all duration-300">
+                <button className="w-full bg-purple-100 text-purple-700 font-semibold py-4 px-6 rounded-xl hover:bg-purple-200 transition-all duration-300 cursor-pointer">
                   View Profile
                 </button>
               </Link>
@@ -62,7 +62,7 @@ export default function SignInPage() {
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="w-full bg-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-xl hover:bg-gray-300 transition-all duration-300"
+                className="w-full bg-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-xl hover:bg-gray-300 transition-all duration-300 cursor-pointer"
               >
                 Sign Out
               </button>
