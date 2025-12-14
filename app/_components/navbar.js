@@ -56,7 +56,6 @@ export default function NavBar() {
                   onClick={() => router.push("/profile")}
                 >
                   Profile
-                  <span className="badge">New</span>
                 </a>
               </li>
               <li>
