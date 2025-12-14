@@ -71,11 +71,11 @@ export default function SearchPage() {
         )}
 
        {/*--- If no results show up --- */}
-       {!loading && cards.length && hasSearched === 0 &&(
-        <div className="text-center py-12">
-          <p className="text-gray-600 text-lg">No cards found :|</p>
-        </div>
-      )}
+        {!loading && cards.length === 0 && hasSearched && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg">No cards found :|</p>
+          </div>
+        )}
 
         {/*---Show cards from search results--- */}
         {!loading && cards.length > 0 && (
