@@ -15,6 +15,10 @@ export async function setFeaturedCard(userId, cardData) {
     types: cardData.types || [],
     supertype: cardData.supertype,
     rarity: cardData.rarity,
+    number: cardData.number || "Unknown",
+    artist: cardData.artist || "Unknown",
+    flavour: cardData.flavorText || "",
+    hp: cardData.hp,
   };
 
   // create a doc for the user's featured card collection (only one featured card)
@@ -48,13 +52,13 @@ export async function getFeaturedCard(userId) {
 }
 
 // removing a featured card
-export async function removeFeaturedCard() {
+export async function removeFeaturedCard(userId) {
   if (!userId) {
     throw new Error("User must be logged in to remove a card.");
   }
 
   try {
-    await setDoc((db, "featuredCards", userId), {});
+    await setDoc(doc(db, "featuredCards", userId), {});
   } catch (error) {
     console.error("Error removing the featured card.");
   }

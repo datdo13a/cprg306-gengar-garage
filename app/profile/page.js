@@ -40,32 +40,41 @@ export default function ProfilePage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-4xl font-bold mb-8">My Profile</h1>
-
       {/* Featured Card Section */}
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">⭐ Featured Card</h2>
-
         {loading ? (
           <div className="flex items-center gap-3">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
             <p>Loading featured card...</p>
           </div>
         ) : featuredCard ? (
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
-            <Image
-              src={featuredCard.images.large || featuredCard.images.small}
-              alt={featuredCard.name}
-              width={400}
-              height={560}
-              className="w-full h-auto rounded-lg"
-            />
-            <div className="mt-4">
-              <h3 className="text-2xl font-bold">{featuredCard.name}</h3>
-              <p className="text-gray-600">Set: {featuredCard.set.name}</p>
-              {featuredCard.rarity && (
-                <p className="text-gray-600">Rarity: {featuredCard.rarity}</p>
-              )}
+          <div className="card lg:card-side bg-base-100 shadow-lg border-1 border-base-300 p-10 mr-30 ml-30">
+            <figure>
+              <Image
+                src={featuredCard.images.large || featuredCard.images.small}
+                alt={featuredCard.name}
+                width={400}
+                height={560}
+                className="w-full h-auto rounded-lg"
+              />
+            </figure>
+            <div className="card-body ml-4">
+              <h2 className="card-title text-3xl">
+                {user.displayName}'s Featured Card
+              </h2>
+              <div className="mt-4">
+                <h3 className="text-2xl font-bold">{featuredCard.name}</h3>
+                <p>{featuredCard.supertype}</p>
+                <p>HP: {featuredCard.hp}</p>
+                <p>{featuredCard.artist}</p>
+                <p className="text-gray-600">Set: {featuredCard.set.name}</p>
+
+                {featuredCard.rarity && (
+                  <p className="text-gray-600">Rarity: {featuredCard.rarity}</p>
+                )}
+
+                <p></p>
+              </div>
             </div>
           </div>
         ) : (
