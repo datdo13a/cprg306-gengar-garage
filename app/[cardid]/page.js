@@ -10,7 +10,7 @@ export default async function Page({ params }) {
 
     return (
         <main>
-        <header>{card.id}</header>
+        <header></header>
         </main>
     );
 }
