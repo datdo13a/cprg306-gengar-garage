@@ -8,6 +8,19 @@ export default function ProfilePage() {
   const { user } = useUserAuth();
   const [featuredCard, setFeaturedCard] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Move join date calculation here, outside the if block
+  let formattedJoinDate = "N/A";
+  if (user) {
+    const creationTime = user.metadata.creationTime;
+    const joinDate = new Date(creationTime);
+
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    formattedJoinDate = joinDate.toLocaleDateString(undefined, options);
+  }
 
   useEffect(() => {
     async function loadFeaturedCard() {
@@ -41,7 +54,57 @@ export default function ProfilePage() {
   return (
     <div className="p-8">
       {/* Profile Info */}
-      <div>Profile Page</div>
+      <div className="mb-8">
+        <div className="card bg-base-100 w-full shadow-lg">
+          <div className="card-body">
+            <div className="flex items-center gap-4">
+              {/* Profile Image Block */}
+              <div className="flex-shrink-0">
+                <img
+                  src={user.photoURL}
+                  className="w-20 h-20 rounded-full"
+                  alt={user.displayName}
+                />
+              </div>
+              {/* Name and Email Block */}
+              <div>
+                <h2 className="card-title">{user.displayName}</h2>
+                <h2>Email: {user.email}</h2>
+              </div>
+            </div>
+            {/* *** END OF CHANGES *** */}
+            <div className="card-actions justify-end">
+              <a href="/search" className="btn btn-primary">
+                Search
+              </a>
+              <a href="/collection" className="btn btn-primary">
+                Go to Collection
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mb-8 flex justify-center">
+        <div className="stats shadow-lg border-1 border-base-100">
+          <div className="stat place-items-center">
+            <div className="stat-title">Featured card</div>
+            <div className="stat-value">
+              {featuredCard ? featuredCard.name : "None"}
+            </div>
+          </div>
+
+          <div className="stat place-items-center">
+            <div className="stat-title">Cards in Collection</div>
+            <div className="stat-value text-secondary">4,200</div>
+            <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
+          </div>
+
+          <div className="stat place-items-center">
+            <div className="stat-title">Date Joined</div>
+            <div className="stat-value">{formattedJoinDate}</div>
+          </div>
+        </div>
+      </div>
       {/* Featured Card Section */}
       <div className="mb-8">
         {loading ? (
@@ -50,7 +113,7 @@ export default function ProfilePage() {
             <p>Loading featured card...</p>
           </div>
         ) : featuredCard ? (
-          <div className="card 2xl:card-side bg-base-100 shadow-lg border-1 border-base-300 p-10 mr-30 ml-30">
+          <div className="card 2xl:card-side shadow-lg border-1 border-base-100 22 border-base-300 p-10 mr-30 ml-30">
             <figure className="shadow-2xl rounded-xl">
               <Image
                 src={featuredCard.images.large || featuredCard.images.small}
@@ -64,8 +127,7 @@ export default function ProfilePage() {
               <h2 className="card-title text-3xl">
                 {user.displayName}'s Featured Card
               </h2>
-              <div className="mt-4">
-                <h3 className="text-3xl font-bold">{featuredCard.name}</h3>
+              <div className="">
                 <p className="text-lg mt-5">Set: {featuredCard.set.name}</p>
 
                 {featuredCard.rarity && (
