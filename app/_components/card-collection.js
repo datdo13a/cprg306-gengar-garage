@@ -19,6 +19,9 @@ export async function addCardToCollection(userId, cardData) {
     artist: cardData.artist || "Unknown",
     flavour: cardData.flavorText || "",
     hp: cardData.hp,
+    rules: cardData.rules || [],
+    abilities: cardData.abilities || [],
+    attacks: cardData.attacks || [],
   };
 
   // Append the new card into the user's `cards` array on the `cardCollection/{userId}` doc.

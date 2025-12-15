@@ -212,8 +212,6 @@ export default function SearchPage() {
                     <strong>{attack.name}:</strong> {attack.text}
                   </p>
                 ))}
-                <br></br>
-
                 {/* ADD BUTTON */}
                 {/* <button
                   onClick={() => addCardToSet(selectedCard)}
