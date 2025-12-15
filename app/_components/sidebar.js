@@ -1,6 +1,28 @@
+"use client";
 import Link from "next/link";
+import { useUserAuth } from "@/_utils/auth-context";
+import { useRouter } from "next/navigation";
 
 export default function SideBar({ children }) {
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const router = useRouter();
+
+  async function handleSignIn() {
+    try {
+      await gitHubSignIn();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleSignOut() {
+    try {
+      await firebaseSignOut();
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div className="drawer lg:drawer-open pt-0.5">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -27,12 +49,15 @@ export default function SideBar({ children }) {
           <li>
             <Link href="/search">Search</Link>
           </li>
-          <li>
-            <a>Settings</a>
-          </li>
-          <li>
-            <a>Log Out</a>
-          </li>
+          {user ? (
+            <li>
+              <a onClick={handleSignOut}>Log Out</a>
+            </li>
+          ) : (
+            <li>
+              <a onClick={handleSignIn}>Sign In</a>
+            </li>
+          )}
         </ul>
       </div>
     </div>

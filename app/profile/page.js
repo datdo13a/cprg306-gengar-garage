@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import { useUserAuth } from "@/_utils/auth-context";
 import { getFeaturedCard } from "../_components/featured-card";
 import Image from "next/image";
+import { getCardCollection } from "../_components/card-collection";
+import card from "daisyui/components/card";
 
 export default function ProfilePage() {
   const { user } = useUserAuth();
   const [featuredCard, setFeaturedCard] = useState(null);
   const [loading, setLoading] = useState(true);
-  // Move join date calculation here, outside the if block
+  const [cardCount, setCardCount] = useState(0);
+
   let formattedJoinDate = "N/A";
   if (user) {
     const creationTime = user.metadata.creationTime;
@@ -25,10 +28,11 @@ export default function ProfilePage() {
   useEffect(() => {
     async function loadFeaturedCard() {
       if (user) {
-        console.log("Loading featured card for user:", user.uid); // Debug log
+        console.log("Loading featured card for user:", user.uid);
         try {
           const card = await getFeaturedCard(user.uid);
-          console.log("Featured card loaded:", card); // Debug log
+          const collection = await getCardCollection(user.uid);
+          setCardCount(collection?.cards?.length || 0);
           setFeaturedCard(card);
         } catch (error) {
           console.error("Error loading featured card:", error);
@@ -68,13 +72,14 @@ export default function ProfilePage() {
 
               <div className="stat place-items-center">
                 <div className="stat-title">Cards in Collection</div>
-                <div className="stat-value text-secondary">4,200</div>
-                <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
+                <div className="stat-value text-secondary">{cardCount}</div>
               </div>
 
               <div className="stat place-items-center">
-                <div className="stat-title">Date Joined</div>
-                <div className="stat-value">{formattedJoinDate}</div>
+                <div className="stat-title ">Date Joined</div>
+                <div className="stat-value text-gray-500 ">
+                  {formattedJoinDate}
+                </div>
               </div>
             </div>
           </div>
@@ -91,8 +96,10 @@ export default function ProfilePage() {
 
               {/* Name and Email Block */}
               <div>
-                <h2 className="card-title text-2xl">{user.displayName}</h2>
-                <h2 className="text-lg">{user.email}</h2>
+                <h2 className="card-title text-2xl text-gray-500 ">
+                  {user.displayName}
+                </h2>
+                <h2 className="text-lg text-gray-500 ">{user.email}</h2>
               </div>
             </div>
             {/* Buttons */}
@@ -137,15 +144,24 @@ export default function ProfilePage() {
                 {user.displayName}'s Featured Card
               </h2>
               <div className="">
-                <p className="text-lg mt-5">Set: {featuredCard.set.name}</p>
+                <p className="text-2xl text-gray-500 font-bold">
+                  {featuredCard.name}
+                </p>
+                <p className="text-lg mt-2 text-gray-500 ">
+                  Set: {featuredCard.set.name}
+                </p>
 
                 {featuredCard.rarity && (
-                  <p className="text-lg mt-2">Rarity: {featuredCard.rarity}</p>
+                  <p className="text-lg mt-2 text-gray-500">
+                    Rarity: {featuredCard.rarity}
+                  </p>
                 )}
-                <p className="text-lg mt-2">
+                <p className="text-lg mt-2 text-gray-500 ">
                   Flavor Text: {featuredCard.flavour}
                 </p>
-                <p className="text-lg mt-2">Artist: {featuredCard.artist}</p>
+                <p className="text-lg mt-2 text-gray-500 ">
+                  Artist: {featuredCard.artist}
+                </p>
                 <p></p>
               </div>
             </div>

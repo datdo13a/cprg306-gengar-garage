@@ -230,7 +230,8 @@ export default function SearchPage() {
                 </button>
                 {/* --- SET FEATURED CARD BUTTON --- */}
                 <button
-                  className="btn btn-active btn-primary"
+                  className="mt-4 w-50 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg
+                              hover:bg-blue-700 transition-colors ml-4"
                   onClick={() => handleSetFeatured(selectedCard)}
                   disabled={featuredCardId === selectedCard.id}
                 >
