@@ -76,7 +76,7 @@ export default function SignInPage() {
                 <Image src="/gengar-garage-icon.png" alt="Gengar Garage" width={80} height={80} className="rounded-full" />
               </div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-                GengarGarage
+                Gengar Garage
               </h1>
               <p className="text-gray-600 text-lg">
                 Your Pokémon Card Collection
